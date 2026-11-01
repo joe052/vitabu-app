@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Card from "@/components/ui/Card";
 import { ROUTES } from "@/constants";
-import SignupForm from "../_components/SignupForm";
+import SignupForm from "@/components/auth/SignupForm";
 
 export const metadata: Metadata = {
   title: "Create an account",

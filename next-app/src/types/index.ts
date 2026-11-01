@@ -35,6 +35,8 @@ export type LoginRequest = {
   password: string;
 };
 
+/** Matches the backend's SignUpDto */
 export type SignupRequest = LoginRequest & {
-  name: string;
+  firstName?: string;
+  lastName?: string;
 };

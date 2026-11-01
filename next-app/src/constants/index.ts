@@ -13,11 +13,20 @@ export const ROUTES = {
   contact: "/contact",
   login: "/login",
   signup: "/signup",
+  forgotPassword: "/forgot-password",
   dashboard: "/dashboard",
   settings: "/settings",
   books: "/books",
   project: (id: string) => `/projects/${id}`,
 } as const;
+
+/** Signed-out users are sent to login from these routes and anything under them (see src/proxy.ts). */
+export const PROTECTED_ROUTES = [
+  ROUTES.books,
+  ROUTES.dashboard,
+  ROUTES.settings,
+  "/projects",
+] as const;
 
 /** Links shown in the public site header. The logo links home. */
 export const MAIN_NAV = [

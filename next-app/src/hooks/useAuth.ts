@@ -1,4 +1,5 @@
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { ROUTES } from "@/constants";
 import { useGetMeQuery, useLogoutMutation } from "@/store/api/authApi";
 import { baseApi } from "@/store/api/baseApi";
@@ -13,6 +14,7 @@ export const useAuth = () => {
 
   const logout = async () => {
     await logoutRequest();
+    toast.success("You've been signed out.");
     router.replace(ROUTES.login);
     dispatch(baseApi.util.resetApiState());
   };

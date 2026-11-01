@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Provider } from "react-redux";
+import { Toaster } from "sonner";
 import { makeStore } from "@/store/store";
 
 /**
@@ -14,7 +15,13 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
   const [store] = useState(makeStore);
 
   /**COMPONENT */
-  return <Provider store={store}>{children}</Provider>;
+  return (
+    <Provider store={store}>
+      {children}
+      {/* Lives here, above every layout, so a toast survives the navigation that follows it */}
+      <Toaster position="top-center" theme="system" richColors closeButton />
+    </Provider>
+  );
 };
 
 export default Providers;

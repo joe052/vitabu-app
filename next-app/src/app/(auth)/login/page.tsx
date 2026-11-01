@@ -2,13 +2,18 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Card from "@/components/ui/Card";
 import { ROUTES } from "@/constants";
-import LoginForm from "../_components/LoginForm";
+import LoginForm from "@/components/auth/LoginForm";
+import { safeRedirect } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Sign in",
 };
 
-const LoginPage = () => {
+const LoginPage = async ({ searchParams }: PageProps<"/login">) => {
+  /**VARIABLES */
+  /**Set by src/proxy.ts when a signed-out user hits a protected page */
+  const { next } = await searchParams;
+
   /**COMPONENT */
   return (
     <Card
@@ -20,24 +25,18 @@ const LoginPage = () => {
         </div>
       }
       footer={
-        <div className="muted space-y-1 text-xs">
-          <p>
-            Demo credentials: <code>demo@example.com</code> /{" "}
-            <code>password</code>
-          </p>
-          <p>
-            No account?{" "}
-            <Link
-              href={ROUTES.signup}
-              className="font-medium text-brand-600 hover:underline dark:text-brand-200"
-            >
-              Create one
-            </Link>
-          </p>
-        </div>
+        <p className="muted text-xs">
+          No account?{" "}
+          <Link
+            href={ROUTES.signup}
+            className="font-medium text-brand-600 hover:underline dark:text-brand-200"
+          >
+            Create one
+          </Link>
+        </p>
       }
     >
-      <LoginForm />
+      <LoginForm redirectTo={safeRedirect(next, ROUTES.dashboard)} />
     </Card>
   );
 };

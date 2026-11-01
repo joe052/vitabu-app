@@ -10,6 +10,18 @@ export const formatDate = (value: string) =>
     new Date(value),
   );
 
+/**
+ * A `?next=` value that is safe to redirect to: a path on this site, or `fallback`.
+ * Blocks `//evil.com` and `/\evil.com`, which browsers treat as other origins.
+ */
+export const safeRedirect = (next: unknown, fallback = "/") =>
+  typeof next === "string" &&
+  next.startsWith("/") &&
+  !next.startsWith("//") &&
+  !next.startsWith("/\\")
+    ? next
+    : fallback;
+
 /** Pull a readable message out of an RTK Query error (an `ApiError` from lib/services/api). */
 export const getErrorMessage = (
   error: unknown,

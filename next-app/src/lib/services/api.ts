@@ -58,16 +58,21 @@ export type ApiError = {
   message?: string;
 };
 
-/** Turn whatever axios throws into an `ApiError`. Expects error bodies like `{ "message": "..." }`. */
+/** Turn whatever axios throws into an `ApiError`. Expects error bodies like `{ "message": "..." }` or `{ "message": ["..."] }`. */
 export const toApiError = (error: unknown): ApiError => {
-  if (!axios.isAxiosError(error)) return {};
+  /**Errors that aren't from axios, e.g. Supabase's AuthError, carry their own message */
+  if (!axios.isAxiosError(error)) {
+    return error instanceof Error ? { message: error.message } : {};
+  }
   if (!error.response) return { message: "Could not reach the server." };
 
   const { status, data } = error.response;
-  const message =
-    data && typeof data === "object" && typeof data.message === "string"
-      ? data.message
-      : undefined;
+  /**NestJS validation errors send `message` as a list - show the first one */
+  const raw =
+    data && typeof data === "object" && Array.isArray(data.message)
+      ? data.message[0]
+      : data?.message;
+  const message = typeof raw === "string" ? raw : undefined;
   return { status, message };
 };
 
